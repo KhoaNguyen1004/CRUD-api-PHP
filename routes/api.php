@@ -8,8 +8,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('students', [StudentController::class, 'index']);
-Route::get('students/{id}', [StudentController::class, 'getById']);
-Route::post('students', [StudentController::class, 'save']);
-Route::put('students/{id}', [StudentController::class, 'updateById']);
-Route::delete('students/{id}', [StudentController::class, 'deleteById']);
+Route::group(['prefix' => 'students'], function () {
+    Route::get('/', [StudentController::class, 'index']);
+    Route::get('{id}', [StudentController::class, 'getById']);
+    Route::post('create', [StudentController::class, 'save']);
+    Route::put('update/{id}', [StudentController::class, 'updateById']);
+    Route::delete('delete/{id}', [StudentController::class, 'deleteById']);
+});
