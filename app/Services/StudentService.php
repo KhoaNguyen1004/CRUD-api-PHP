@@ -11,7 +11,8 @@ class StudentService implements StudentServiceInterface
 
     public function getAllStudent()
     {
-        return Student::all();
+        $students = Student::all()->toArray();
+        return $students;
     }
 
     public function getStudentById($id)
@@ -24,9 +25,10 @@ class StudentService implements StudentServiceInterface
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'phone' => 'required|digits:10',
-            'course' => 'required|string|max:255',
+            'status' => 'required|string|max:255',
             'email' => 'required|email|max:255',
         ]);
+
         return Student::create($validated);
     }
 
@@ -35,7 +37,7 @@ class StudentService implements StudentServiceInterface
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'phone' => 'required|digits:10',
-            'course' => 'required|string|max:255',
+            'status' => 'required|string|max:255',
             'email' => 'required|email|max:255' . $id,
         ]);
 

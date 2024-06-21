@@ -25,27 +25,17 @@ class StudentController extends Controller
             'status' => 200,
             'data' => $students
         ], 200);
-
-        //        if ($students->count() > 0) {
-        //            return response()->json([
-        //                'status:' => 200,
-        //                'message:' => $students
-        //            ], 200);
-        //        } else {
-        //            return response()->json([
-        //                'status:' => 404,
-        //                'message:' => 'No record found'
-        //            ], 404);
-        //        }
     }
 
     // Create new student
     public function save(Request $request)
     {
+        // Set the 'status' is active
+        $request['status'] = 'active';
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'phone' => 'required|digits:10',
-            'course' => 'required|string|max:255',
             'email' => 'required|email|max:255',
         ]);
         if ($validator->fails()) {
@@ -54,13 +44,6 @@ class StudentController extends Controller
                 'errors:' => $validator->messages()
             ], 422);
         } else {
-            //            $student = Student::create([
-            //                'name' => $request->name,
-            //                'phone' => $request->phone,
-            //                'course' => $request->course,
-            //                'email' => $request->email,
-            //            ]);
-
             $student = $this->studentService->create($request);
 
             if ($student) {
@@ -85,13 +68,13 @@ class StudentController extends Controller
 
         if ($student) {
             return response()->json([
-                'status:' => 200,
-                'student:' => $student
+                "status" => 200,
+                "student" => $student
             ], 200);
         } else {
             return response()->json([
-                'status:' => 404,
-                'message:' => 'No student found with ID: ' . $id,
+                'status' => 404,
+                'message' => 'No student found with ID: ' . $id,
             ], 404);
         }
     }
@@ -102,13 +85,13 @@ class StudentController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'phone' => 'required|digits:10',
-            'course' => 'required|string|max:255',
+            'status' => 'required|string|max:255',
             'email' => 'required|email|max:255',
         ]);
         if ($validator->fails()) {
             return response()->json([
-                'status:' => 422,
-                'errors:' => $validator->messages()
+                'status' => 422,
+                'errors' => $validator->messages()
             ], 422);
         } else {
             //            $student = Student::find($id);
@@ -117,17 +100,17 @@ class StudentController extends Controller
                 $student->update([
                     'name' => $request->name,
                     'phone' => $request->phone,
-                    'course' => $request->course,
+                    'status' => $request->status,
                     'email' => $request->email,
                 ]);
                 return response()->json([
-                    'status:' => 200,
-                    'message:' => 'Student updated successfully'
+                    'status' => 200,
+                    'message' => 'Student updated successfully'
                 ], 200);
             } else {
                 return response()->json([
-                    'status:' => 404,
-                    'message:' => 'No student found with ID: ' . $id,
+                    'status' => 404,
+                    'message' => 'No student found with ID: ' . $id,
                 ], 404);
             }
         }
@@ -140,13 +123,13 @@ class StudentController extends Controller
         $student = $this->studentService->delete($id);
         if ($student) {
             return response()->json([
-                'status:' => 200,
-                'student:' => 'Student deleted successfully'
+                'status' => 200,
+                'student' => 'Student deleted successfully'
             ], 200);
         } else {
             return response()->json([
-                'status:' => 404,
-                'message:' => 'No student found with ID: ' . $id,
+                'status' => 404,
+                'message' => 'No student found with ID: ' . $id,
             ], 404);
         }
     }
